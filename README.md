@@ -4,21 +4,38 @@ The goal of this project is to enable the Unitree H1-2 humanoid robot to communi
 
 # Timeline (7–8 Months)
 
-## Unitree Humanoid Robot H1-2 Updates
+## Short-Term Goals (Months 1–3) – Foundation
 
-- Improved motion control algorithms for smoother walking and running.
-- Enhanced sensor integration for better obstacle detection and navigation.
-- Upgraded battery system for longer operational time.
+- ✅ Confirm hardware configuration (PC modules, IPs, sensors).
+- ✅ Establish SSH & ROS 2 communication with robot core and hands.
+- ✅ Access and test onboard camera and hands control.
+- Enable LiDAR and other sensors in ROS 2.
+- Configure router/dual-IP solution for parallel access.
+- Build dashboard for easy monitoring of robot sensors.
+- Create URDF/Xacro model of H1-2 for simulation.
+- Set up ROS 2 simulation environment (Gazebo/Isaac Sim).
+- Implement basic teleop for joint-level and base movement.
+- Document setup, connectivity, and workflows.
 
 
-## Unitree Humanoid Robot H1-2 Updates
+## Long-Term Goals (Months 4–8) – Integration & Autonomy
 
-- Improved motion control algorithms for smoother walking and running.
-- Enhanced sensor integration for better obstacle detection and navigation.
-- Upgraded battery system for longer operational time.
-- **New SLAM Features:**
-  - Integrated real-time SLAM (Simultaneous Localization and Mapping) for autonomous navigation.
-  - Enhanced mapping accuracy using multi-sensor fusion (LiDAR, IMU, cameras).
-  - Dynamic obstacle avoidance based on live map updates.
-  - Support for saving and loading environment maps for repeatable missions.
-  - Visual SLAM support for environments with limited LiDAR coverage.
+- Implement motion planning for arm and base in ROS 2.
+- Develop grasping pipeline for simple objects.
+- Integrate LLM for natural language command understanding.
+- Integrate VLM for visual perception (object recognition/classification).
+- Connect VLM outputs to ROS 2 perception and control stack.
+- Enable human-robot interaction: “Pick up X and give it to me.”
+- Deploy integrated LLM+VLM system on real H1-2.
+- Optimize motion planning for safe and efficient handover.
+- Conduct real-world trials with object pickup and human transfer.
+- Prepare final workflow documentation, performance results, and demo presentation.
+
+
+## End Goal
+
+A humanoid robot assistant that:
+  -Understands natural language commands.
+  - Recognizes objects visually.
+  - Picks up objects safely.
+  - Hands them over to humans in collaborative tasks.
