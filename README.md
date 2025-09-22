@@ -39,3 +39,8 @@ A humanoid robot assistant that:
   - Recognizes objects visually.
   - Picks up objects safely.
   - Hands them over to humans in collaborative tasks.
+
+
+## Author
+**Tirumalapudi Raviteja**  
+- Email: t.raviteja@gmail.com
