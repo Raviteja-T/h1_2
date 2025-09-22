@@ -1,4 +1,8 @@
-# h1_2
+# Project Roadmap – Unitree H1-2 with LLM & VLM Integration
+
+The goal of this project is to enable the Unitree H1-2 humanoid robot to communicate naturally with humans using Large Language Models (LLMs) and Vision-Language Models (VLMs), and to perform collaborative tasks such as picking up objects and handing them over safely to humans.
+
+# Timeline (7–8 Months)
 
 ## Unitree Humanoid Robot H1-2 Updates
 
