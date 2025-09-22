@@ -34,7 +34,7 @@ The goal of this project is to enable the Unitree H1-2 humanoid robot to communi
 
 ## End Goal
 
-A humanoid robot assistant that:
+**A humanoid robot assistant that:**
   -Understands natural language commands.
   - Recognizes objects visually.
   - Picks up objects safely.
