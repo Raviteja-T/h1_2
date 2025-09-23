@@ -39,6 +39,18 @@ The goal of this project is to enable the Unitree H1-2 humanoid robot to communi
   - Picks up objects safely.
   - Hands them over to humans in collaborative tasks.
 
+## H1-2 Robot Dashboard
+
+### Run the Dashboard
+```bash
+python3 /dashboard/main.py
+
+## Notes
+
+- Sample files can be found in the old_records folder.
+- Detected objects are saved in detected_objects.txt for future reference.
+- LiDAR integration is currently in progress.
+- Hand gripper functionality is under development.
 
 ## Author
 **Tirumalapudi Raviteja**  
