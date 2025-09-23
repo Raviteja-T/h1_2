@@ -42,8 +42,8 @@ The goal of this project is to enable the Unitree H1-2 humanoid robot to communi
 ## H1-2 Robot Dashboard
 
 ### Prerequisites
-- Install and build **Unitree SDK2 (Python version)**. You can find it here: [unitreerobotics/unitree_sdk2_python](https://github.com/unitreerobotics/unitree_sdk2_python) :contentReference[oaicite:0]{index=0}  
-- Ensure Python ≥ 3.8 and required dependencies (e.g. numpy, opencv-python, cyclonedds) are installed. :contentReference[oaicite:1]{index=1}
+- Install and build **Unitree SDK2 (Python version)**. You can find it here: [unitreerobotics/unitree_sdk2_python](https://github.com/unitreerobotics/unitree_sdk2_python)  
+- Ensure Python ≥ 3.8 and required dependencies (e.g. numpy, opencv-python, cyclonedds) are installed. 
 
 ### Run the Dashboard
 ```bash
