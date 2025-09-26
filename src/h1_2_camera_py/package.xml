@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>h1_2_camera_py</name>
+  <version>0.1.0</version>
+  <description>ROS 2 Python node for Unitree H1-2 camera streaming</description>
+  <maintainer email="raviteja@example.com">TIRUMALAPUDI Raviteja</maintainer>
+  <license>Apache License 2.0</license>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
