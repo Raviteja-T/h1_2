@@ -1,8 +1,11 @@
-# Unitree Front Camera ROS 2 Node
+# Unitree H1-2 Camera ROS 2 Node
 
-This ROS 2 package streams the **front camera** from a Unitree robot and publishes it as a ROS 2 `sensor_msgs/Image` topic (`/camera/image_raw`). It is fully ROS 2 compliant and allows other nodes to subscribe for further processing.
+This ROS 2 package streams the **front camera** from a Unitree robot H1-2 and publishes it as a ROS 2 `sensor_msgs/Image` topic (`/camera/image_raw`). It is fully ROS 2 compliant and allows other nodes to subscribe for further processing.
 
 ---
+## Author / Maintainer
+
+## Tirumalapudi Raviteja
 
 ## Install Dependencies
 
@@ -25,7 +28,7 @@ source install/setup.bash
 
 ## Usage
 
-### Run the Camera Node
+### Run the Camera Node (Unitree H1-2)
 
 ```bash
 ros2 run unitree_camera_node camera_publisher
@@ -71,24 +74,12 @@ self.get_logger().debug("Published frame")
 
 ---
 
-## Extending for Back Camera
-
-- Duplicate the node and change the RTSP URL and topic name:
-
-```python
-self.stream_url = 'rtsp://192.168.123.161:8552/back_video'
-self.publisher_ = self.create_publisher(Image, 'camera/back/image_raw', 10)
-```
-
-- Subscribe to `/camera/back/image_raw` separately.
-
----
-
 ## Notes
 
-- Ensure a **network connection** to the Unitree robot.
-- RTSP/FFmpeg must be installed as OpenCV uses it to grab frames.
-- For **low latency streaming**, consider using **GStreamer pipelines** in the future.
+- This package is designed only for the Unitree H1-2 robot.
+- Ensure a network connection to the H1-2 robot.
+- RTSP/FFmpeg must be installed, as OpenCV uses it to grab frames. 
+- For low latency streaming, consider using GStreamer pipelines in the future.
 
 ---
 
