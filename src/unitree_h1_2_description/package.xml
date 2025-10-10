@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>unitree_h1_2_description</name>
+  <version>0.0.1</version>
+  <description>Unitree H1-2 robot description package for ROS 2 Humble</description>
+
+  <maintainer email="t.raviteja@gmail.com">Ravi</maintainer>
+  <license>MIT</license>
+
+  <!-- Build tool -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Build / run dependencies -->
+  <depend>rclcpp</depend>
+  <depend>xacro</depend>
+  <depend>urdf</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>joint_state_publisher_gui</depend>
+  <depend>rviz2</depend>
+
+  <!-- Linting (optional) -->
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
