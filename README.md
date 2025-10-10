@@ -24,7 +24,7 @@ This enables users to view actual robot movements inside **RViz 2**, fully synce
 
 ## ⚙️ Node Information
 
-- **Package:** `unitree_h1_ros2`  
+- **Package:** `unitree_h1_2_description`  
 - **Node:** `unitree_joint_state_publisher`  
 - **Published Topic:** `/joint_states`
 
@@ -42,18 +42,18 @@ This enables users to view actual robot movements inside **RViz 2**, fully synce
 ### 1️⃣ Build the workspace
 ```bash
 cd ~/ros2_ws
-colcon build --packages-select unitree_h1_ros2
+colcon build --packages-select unitree_h1_2_description
 source install/setup.bash
 ```
 
 ### 2️⃣ Run the joint state publisher node
 ```bash
-ros2 run unitree_h1_ros2 joint_state_publisher --ros-args -p interface_name:=wlp0s20f3
+ros2 run unitree_h1_2_description joint_state_publisher --ros-args -p interface_name:=wlp0s20f3
 ```
 
 ### 3️⃣ Launch RViz for visualization
 ```bash
-ros2 launch unitree_h1_ros2 rviz_h1_visualization.launch.py
+ros2 launch unitree_h1_2_description rviz_h1_visualization.launch.py
 ```
 
 ---
