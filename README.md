@@ -1,61 +1,84 @@
-# Project Roadmap – Unitree H1-2 with LLM & VLM Integration
+# Unitree H1-2 Description Package
 
-The goal of this project is to enable the Unitree H1-2 humanoid robot to communicate naturally with humans using Large Language Models (LLMs) and Vision-Language Models (VLMs), and to perform collaborative tasks such as picking up objects and handing them over safely to humans.
+This ROS 2 package contains the **URDF model**, meshes, and launch files for the **Unitree H1-2 humanoid robot**. It allows visualization of the robot in **RViz** and supports joint state publishing.
 
-# Timeline (7–8 Months)
+---
 
-## Short-Term Goals (Months 1–3) – Foundation
+## Package Structure
 
-- ✅ Confirm hardware configuration (PC modules, IPs, sensors).
-- ✅ Establish SSH & ROS 2 communication with robot core and hands.
-- ✅ Access and test onboard camera and hands control.
-- Enable LiDAR and other sensors in ROS 2.
-- Configure router/dual-IP solution for parallel access.
-- Build dashboard for easy monitoring of robot sensors.
-- Create URDF/Xacro model of H1-2 for simulation.
-- Set up ROS 2 simulation environment (Gazebo/Isaac Sim).
-- Implement basic teleop for joint-level and base movement.
-- Document setup, connectivity, and workflows.
+```
+unitree_h1_2_description/
+├── CMakeLists.txt
+├── package.xml
+├── launch/
+│   └── display.launch.py
+├── meshes/
+│   ├── pelvis.STL
+│   ├── torso_link.STL
+│   └── ... (other robot part meshes)
+├── include/unitree_h1_2_description/
+├── src/
+├── h1_2.urdf
+├── h1_2_handless.urdf
+├── README.md
+└── h1_2.png
+```
 
+- **URDF files:** `h1_2.urdf` contains the full humanoid robot model.  
+- **Meshes:** STL files for each robot link used for visualization and collision.  
+- **Launch:** `display.launch.py` to load the URDF in RViz with `robot_state_publisher` and `joint_state_publisher_gui`.
 
-## Long-Term Goals (Months 4–8) – Integration & Autonomy
+---
 
-- Implement motion planning for arm and base in ROS 2.
-- Develop grasping pipeline for simple objects.
-- Integrate LLM for natural language command understanding.
-- Integrate VLM for visual perception (object recognition/classification).
-- Connect VLM outputs to ROS 2 perception and control stack.
-- Enable human-robot interaction: “Pick up X and give it to me.”
-- Deploy integrated LLM+VLM system on real H1-2.
-- Optimize motion planning for safe and efficient handover.
-- Conduct real-world trials with object pickup and human transfer.
-- Prepare final workflow documentation, performance results, and demo presentation.
+## Features
 
+- Full **URDF model** of Unitree H1-2 humanoid robot.  
+- All links and joints correctly defined for RViz visualization.  
+- Supports **joint_state_publisher GUI** for interactive joint control.  
+- Handles **floating base** configuration.  
 
-## End Goal
-**A humanoid robot assistant that**
-  - Understands natural language commands.
-  - Recognizes objects visually.
-  - Picks up objects safely.
-  - Hands them over to humans in collaborative tasks.
+---
 
-## H1-2 Robot Dashboard
+## Dependencies
 
-### Prerequisites
-- Install and build **Unitree SDK2 (Python version)**. You can find it here: [unitreerobotics/unitree_sdk2_python](https://github.com/unitreerobotics/unitree_sdk2_python)  
-- Ensure Python ≥ 3.8 and required dependencies (e.g. numpy, opencv-python, cyclonedds) are installed. 
+- ROS 2 Humble  
+- `robot_state_publisher`  
+- `joint_state_publisher_gui`  
+- `rviz2`
 
-### Run the Dashboard
+Install dependencies:
+
 ```bash
-python3 /dashboard/main.py
+sudo apt update
+sudo apt install ros-humble-robot-state-publisher ros-humble-joint-state-publisher-gui ros-humble-rviz2
+```
+
+---
+
+## Launching in RViz
+
+From your workspace:
+
+```bash
+cd ~/h1_2_ws
+colcon build --symlink-install
+source install/setup.bash
+ros2 launch unitree_h1_2_description display.launch.py
+```
+
+- This will open RViz with the robot model loaded.  
+- Use the **Joint State Publisher GUI** to move joints interactively.
+
+---
 
 ## Notes
 
-- Sample files can be found in the old_records folder.
-- Detected objects are saved in detected_objects.txt for future reference.
-- LiDAR integration is currently in progress.
-- Hand gripper functionality is under development.
+- Make sure all **mesh files** are present in the `meshes/` folder.  
+- All `<material>` elements in the URDF have a **name attribute** for RViz compatibility.  
+- The robot origin is aligned with the `world` link via a fixed joint (`world_to_pelvis`).  
+
+---
 
 ## Author
-**Tirumalapudi Raviteja**  
-- Email: t.raviteja@gmail.com
+
+**Raviteja Tirumalapudi**  
