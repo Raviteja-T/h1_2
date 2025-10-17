@@ -1,61 +1,93 @@
-# Project Roadmap – Unitree H1-2 with LLM & VLM Integration
+# ROS2 Workspace: Livox MID360 & Realsense Segmentation
 
-The goal of this project is to enable the Unitree H1-2 humanoid robot to communicate naturally with humans using Large Language Models (LLMs) and Vision-Language Models (VLMs), and to perform collaborative tasks such as picking up objects and handing them over safely to humans.
+This repository contains ROS2 packages for working with:
 
-# Timeline (7–8 Months)
+1. **Livox MID360 LiDAR** - ROS2 driver and point cloud visualization.
+2. **Realsense Camera** - Object detection and segmentation using Intel Realsense.
 
-## Short-Term Goals (Months 1–3) – Foundation
+---
 
-- ✅ Confirm hardware configuration (PC modules, IPs, sensors).
-- ✅ Establish SSH & ROS 2 communication with robot core and hands.
-- ✅ Access and test onboard camera and hands control.
-- Enable LiDAR and other sensors in ROS 2.
-- Configure router/dual-IP solution for parallel access.
-- Build dashboard for easy monitoring of robot sensors.
-- Create URDF/Xacro model of H1-2 for simulation.
-- Set up ROS 2 simulation environment (Gazebo/Isaac Sim).
-- Implement basic teleop for joint-level and base movement.
-- Document setup, connectivity, and workflows.
+## Workspace Structure
 
+```
+ros2_ws/
+├─ src/
+│  ├─ livox_ros_driver2/        # Livox MID360 ROS2 driver
+│  ├─ realsense_segmentation/   # Realsense detection and segmentation
+│  └─ other_packages/           # Any other packages
+├─ build/
+├─ install/
+└─ log/
+```
 
-## Long-Term Goals (Months 4–8) – Integration & Autonomy
+---
 
-- Implement motion planning for arm and base in ROS 2.
-- Develop grasping pipeline for simple objects.
-- Integrate LLM for natural language command understanding.
-- Integrate VLM for visual perception (object recognition/classification).
-- Connect VLM outputs to ROS 2 perception and control stack.
-- Enable human-robot interaction: “Pick up X and give it to me.”
-- Deploy integrated LLM+VLM system on real H1-2.
-- Optimize motion planning for safe and efficient handover.
-- Conduct real-world trials with object pickup and human transfer.
-- Prepare final workflow documentation, performance results, and demo presentation.
+## Prerequisites
 
+* Ubuntu 22.04
+* ROS2 Humble
+* Intel Realsense SDK2
+* Livox SDK2
+* Python 3.10+
+* CMake 3.10+
+* Dependencies installed for both packages (refer to each package `README` if needed)
 
-## End Goal
-**A humanoid robot assistant that**
-  - Understands natural language commands.
-  - Recognizes objects visually.
-  - Picks up objects safely.
-  - Hands them over to humans in collaborative tasks.
+---
 
-## H1-2 Robot Dashboard
+## Installation
 
-### Prerequisites
-- Install and build **Unitree SDK2 (Python version)**. You can find it here: [unitreerobotics/unitree_sdk2_python](https://github.com/unitreerobotics/unitree_sdk2_python)  
-- Ensure Python ≥ 3.8 and required dependencies (e.g. numpy, opencv-python, cyclonedds) are installed. 
+Clone this workspace:
 
-### Run the Dashboard
 ```bash
-python3 /dashboard/main.py
+git clone <your-repo-url> ros2_ws
+cd ros2_ws
+vcs import src < ros2.repos   # optional if using vcs
+colcon build
+source install/setup.bash
+```
+
+---
+
+## Usage
+
+### 1. Livox MID360 LiDAR
+
+Launch the driver and visualize in RViz:
+
+```bash
+ros2 launch livox_ros_driver2 msg_MID360_launch.py
+```
+
+Make sure your LiDAR is connected and network configured correctly.
+
+### 2. Realsense Detection & Segmentation
+
+Launch the detection node:
+
+```bash
+ros2 launch realsense_segmentation realsense_detection.launch.py
+```
+
+This will start camera streaming and detection/segmentation pipelines.
+
+---
 
 ## Notes
 
-- Sample files can be found in the old_records folder.
-- Detected objects are saved in detected_objects.txt for future reference.
-- LiDAR integration is currently in progress.
-- Hand gripper functionality is under development.
+* Keep your `wlp0s20f3` (or network interface) IP properly configured for LiDAR communication.
+* Avoid pushing `build/`, `install/`, and `log/` directories to GitHub. Use `.gitignore`.
+
+---
+
+## Branch Naming Suggestion
+
+* `main` or `master`: stable code
+* `develop`: development branch
+* Feature branches: `feature/livox-integration`, `feature/realsense-segmentation`
+
+---
 
 ## Author
-**Tirumalapudi Raviteja**  
-- Email: t.raviteja@gmail.com
+
+**Raviteja Tirumalapudi**
+Email: [t.raviteja@gmail.com](mailto:t.raviteja@gmail.com)
