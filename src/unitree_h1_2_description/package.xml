@@ -10,13 +10,15 @@
   <!-- Build tool -->
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <!-- Build / run dependencies -->
-  <depend>rclcpp</depend>
-  <depend>xacro</depend>
-  <depend>urdf</depend>
-  <depend>robot_state_publisher</depend>
-  <depend>joint_state_publisher_gui</depend>
-  <depend>rviz2</depend>
+  <!-- Runtime dependencies -->
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>urdf</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+
+  <!-- Optional: if your Python script uses rclpy -->
+  <exec_depend>rclpy</exec_depend>
 
   <!-- Linting (optional) -->
   <test_depend>ament_lint_auto</test_depend>
@@ -26,3 +28,4 @@
     <build_type>ament_cmake</build_type>
   </export>
 </package>
+
