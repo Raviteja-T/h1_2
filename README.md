@@ -1,61 +1,55 @@
-# Project Roadmap – Unitree H1-2 with LLM & VLM Integration
+# Unitree H1-2 Robot Dashboard
 
-The goal of this project is to enable the Unitree H1-2 humanoid robot to communicate naturally with humans using Large Language Models (LLMs) and Vision-Language Models (VLMs), and to perform collaborative tasks such as picking up objects and handing them over safely to humans.
+This project provides a real-time dashboard for the Unitree H1-2 robot, displaying IMU data, joint states, battery information, and front camera feed. The dashboard is built using **PyQt6** for GUI and **pyqtgraph** for live plotting.
 
-# Timeline (7–8 Months)
+## Features
 
-## Short-Term Goals (Months 1–3) – Foundation
+- Real-time IMU visualization (Roll, Pitch, Yaw)  
+- Battery status display (voltage, current, temperature, cycle count)  
+- Joint states table (`q` and `dq`) for all 27 motors  
+- Front camera feed integrated into the dashboard  
+- Graceful exit and automatic stop of data streams  
 
-- ✅ Confirm hardware configuration (PC modules, IPs, sensors).
-- ✅ Establish SSH & ROS 2 communication with robot core and hands.
-- ✅ Access and test onboard camera and hands control.
-- Enable LiDAR and other sensors in ROS 2.
-- Configure router/dual-IP solution for parallel access.
-- Build dashboard for easy monitoring of robot sensors.
-- Create URDF/Xacro model of H1-2 for simulation.
-- Set up ROS 2 simulation environment (Gazebo/Isaac Sim).
-- Implement basic teleop for joint-level and base movement.
-- Document setup, connectivity, and workflows.
+## Requirements
 
+- Python >= 3.10  
+- PyQt6  
+- pyqtgraph  
+- OpenCV (`opencv-python`)  
+- `unitree-sdk2py` (Unitree Python SDK v2)  
 
-## Long-Term Goals (Months 4–8) – Integration & Autonomy
+You can install dependencies with:
 
-- Implement motion planning for arm and base in ROS 2.
-- Develop grasping pipeline for simple objects.
-- Integrate LLM for natural language command understanding.
-- Integrate VLM for visual perception (object recognition/classification).
-- Connect VLM outputs to ROS 2 perception and control stack.
-- Enable human-robot interaction: “Pick up X and give it to me.”
-- Deploy integrated LLM+VLM system on real H1-2.
-- Optimize motion planning for safe and efficient handover.
-- Conduct real-world trials with object pickup and human transfer.
-- Prepare final workflow documentation, performance results, and demo presentation.
-
-
-## End Goal
-**A humanoid robot assistant that**
-  - Understands natural language commands.
-  - Recognizes objects visually.
-  - Picks up objects safely.
-  - Hands them over to humans in collaborative tasks.
-
-## H1-2 Robot Dashboard
-
-### Prerequisites
-- Install and build **Unitree SDK2 (Python version)**. You can find it here: [unitreerobotics/unitree_sdk2_python](https://github.com/unitreerobotics/unitree_sdk2_python)  
-- Ensure Python ≥ 3.8 and required dependencies (e.g. numpy, opencv-python, cyclonedds) are installed. 
-
-### Run the Dashboard
 ```bash
-python3 /dashboard/main.py
+pip install pyqt6 pyqtgraph opencv-python unitree-sdk2py
+```
 
-## Notes
+## Setup
 
-- Sample files can be found in the old_records folder.
-- Detected objects are saved in detected_objects.txt for future reference.
-- LiDAR integration is currently in progress.
-- Hand gripper functionality is under development.
+1. Connect your computer to the H1-2 robot network.  
+2. Set your system IP in the same subnet as the robot (e.g., `192.168.123.x`).  
+3. Ensure DDS communication is working using the Unitree SDK.  
+
+## Usage
+
+```bash
+python3 dashboard.py <network_interface>
+```
+
+Example:
+
+```bash
+python3 dashboard.py wlp0s20f3
+```
+
+- Press the **X** button to close the dashboard gracefully.  
+- The dashboard updates IMU, joint, battery, and camera data in real time.  
+
 
 ## Author
-**Tirumalapudi Raviteja**  
-- Email: t.raviteja@gmail.com
+
+Raviteja Tirumalapudi  
+
+## License
+
+This project is released under **BSD-3-Clause License**.
