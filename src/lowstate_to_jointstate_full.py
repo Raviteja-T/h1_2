@@ -5,7 +5,10 @@ from rclpy.node import Node
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import TransformStamped
 from tf2_ros import TransformBroadcaster
-from unitree_hg.msg import LowState  # H1-2 LowState msg
+
+from unitree_sdk2py.core.channel import ChannelSubscriber, ChannelFactoryInitialize
+from unitree_sdk2py.idl.unitree_hg.msg.dds_ import LowState_
+
 
 class LowStateToJointStateFull(Node):
     def __init__(self):
@@ -17,13 +20,12 @@ class LowStateToJointStateFull(Node):
         # TF broadcaster for floating base
         self.tf_broadcaster = TransformBroadcaster(self)
 
-        # Subscribe to LowState topic
-        self.lowstate_sub = self.create_subscription(
-            LowState,
-            '/lowstate',
-            self.lowstate_callback,
-            10
-        )
+        # Initialize the Unitree SDK channels
+        ChannelFactoryInitialize(0)
+
+        # Subscribe to the SDK LowState_ channel
+        self.subscriber = ChannelSubscriber("rt/lowstate", LowState_)
+        self.subscriber.Init(self.lowstate_callback, 10)
 
         # Full URDF joints (legs + torso + arms + hands)
         self.joint_names = [
@@ -50,7 +52,7 @@ class LowStateToJointStateFull(Node):
             'R_pinky_proximal_joint', 'R_pinky_intermediate_joint'
         ]
 
-    def lowstate_callback(self, msg):
+    def lowstate_callback(self, msg: LowState_):
         # --------------------------
         # Publish floating base as TF
         # --------------------------
@@ -58,8 +60,8 @@ class LowStateToJointStateFull(Node):
         t.header.stamp = self.get_clock().now().to_msg()
         t.header.frame_id = 'world'
         t.child_frame_id = 'pelvis'
-        
-        # Use msg.body_state or default zeros if unavailable
+
+        # Fill translation and rotation (default zeros if unavailable)
         t.transform.translation.x = getattr(msg, 'x', 0.0)
         t.transform.translation.y = getattr(msg, 'y', 0.0)
         t.transform.translation.z = getattr(msg, 'z', 0.0)
@@ -77,12 +79,12 @@ class LowStateToJointStateFull(Node):
         js.header.stamp = self.get_clock().now().to_msg()
         js.name = self.joint_names
 
-        # 35 motors from LowState (legs + torso + arms)
+        # 35 motors from LowState_ (legs + torso + arms)
         positions = [m.q for m in msg.motor_state]
         velocities = [m.dq for m in msg.motor_state]
         efforts = [m.tau_est for m in msg.motor_state]
 
-        # Fill remaining hand joints with zeros (if any)
+        # Fill remaining hand joints with zeros
         num_extra = len(self.joint_names) - len(positions)
         if num_extra > 0:
             positions += [0.0] * num_extra
@@ -96,12 +98,14 @@ class LowStateToJointStateFull(Node):
         self.joint_pub.publish(js)
         self.get_logger().debug(f'Published {len(self.joint_names)} joint states.')
 
+
 def main(args=None):
     rclpy.init(args=args)
     node = LowStateToJointStateFull()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

@@ -48,12 +48,12 @@ source install/setup.bash
 
 ### 2️⃣ Run the joint state publisher node
 ```bash
-ros2 run unitree_h1_2_description joint_state_publisher --ros-args -p interface_name:=wlp0s20f3
+ros2 run unitree_h1_2_description lowstate_to_jointstate_full
 ```
 
 ### 3️⃣ Launch RViz for visualization
 ```bash
-ros2 launch unitree_h1_2_description rviz_h1_visualization.launch.py
+ros2 launch unitree_h1_2_description display.launch.py
 ```
 
 ---
