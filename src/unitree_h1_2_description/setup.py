@@ -23,8 +23,8 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ravi',
-    maintainer_email='your_email@example.com',
+    maintainer='Raviteja',
+    maintainer_email='t.raviteja@gmail.com',
     description='Unitree H1-2 description and lowstate_to_jointstate node',
     license='Apache License 2.0',
     entry_points={
