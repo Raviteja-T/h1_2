@@ -238,6 +238,6 @@ This project is licensed under the **MIT License** - see the LICENSE file for de
 **GitHub Issues:** Create New Issue  
 
 <div align="center">
-Built with ❤️ by Ravi Teja  
+Built with ❤️ by Raviteja Tirumalapudi  
 ⭐ If this project helped you, please give it a star!
 </div>
