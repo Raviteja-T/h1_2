@@ -24,11 +24,6 @@ A complete ROS2-based teleoperation system for Unitree H1_2 humanoid robot using
 - 🎪 **Arm waving animation** for demonstration
 - 🚀 **Easy setup** with clear execution steps
 
-## 🎮 Demo
-
-![H1_2 Teleoperation](https://via.placeholder.com/800x400/2D3748/FFFFFF?text=H1_2+Robot+Teleoperation+Demo)  
-*Real-time control of Unitree H1_2 humanoid robot in MuJoCo simulation*
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -43,7 +38,7 @@ A complete ROS2-based teleoperation system for Unitree H1_2 humanoid robot using
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/your-username/unitree-h12-teleop.git
+git clone https://github.com/Raviteja-T/h1_2.git
 cd unitree_ros2_ws
 ```
 2. **Build the ROS2 package:**
@@ -225,28 +220,6 @@ Test Sequence:
 | Robot falls over | Use elastic band (`press 9`) or reset (`press R`) |
 | Import errors | Rebuild package: `colcon build --packages-select h12_teleop` |
 
-## 🔧 Development
-
-**Adding New Features**
-```bash
-git checkout -b feature/your-feature
-# Implement and test your feature
-git push -u origin feature/your-feature
-```
-
-**Current Development Branch:**
-```bash
-git checkout feature/actual-walking-gait
-```
-Working on enhanced walking gait with actual forward propulsion.
-
-## 🤝 Contributing
-
-1. Fork the repository  
-2. Create a branch: `git checkout -b feature/AmazingFeature`  
-3. Commit changes: `git commit -m 'Add some AmazingFeature'`  
-4. Push: `git push origin feature/AmazingFeature`  
-5. Open a Pull Request  
 
 ## 📄 License
 
