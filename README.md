@@ -218,6 +218,6 @@ For questions or issues:
 **GitHub Issues:** Create New Issue  
 
 <div align="center">
-Built with ❤️ by Ravi Teja  
+Built with ❤️ by Raviteja Tirumalapudi  
 ⭐ If this project helped you, give it a star!
 </div>
