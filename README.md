@@ -8,7 +8,7 @@
 
 A complete ROS2-based teleoperation system for Unitree H1_2 humanoid robot using MuJoCo simulation. Real-time keyboard control of 27 joints with full body movement, arm control, and bipedal walking gait capabilities.
 
-**Author:** Ravi Teja  
+**Author:** Raviteja Tirumalapudi
 **Email:** t.raviteja@gmail.com  
 
 ## ✨ Features
