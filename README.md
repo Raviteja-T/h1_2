@@ -22,11 +22,6 @@ A complete ROS2-based teleoperation system for Unitree H1_2 humanoid robot using
 - 📊 **System monitoring** with status reporting
 - 🚀 **Easy setup** with clear execution steps
 
-## 🎮 Demo
-
-![H1_2 Teleoperation](https://via.placeholder.com/800x400/2D3748/FFFFFF?text=H1_2+Robot+Teleoperation+Demo)  
-*Real-time control of Unitree H1_2 humanoid robot in MuJoCo simulation*
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -41,7 +36,7 @@ A complete ROS2-based teleoperation system for Unitree H1_2 humanoid robot using
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/your-username/h12-teleop-system.git
+git clone https://github.com/Raviteja-T/h1_2.git
 cd unitree_ros2_ws
 ```
 
