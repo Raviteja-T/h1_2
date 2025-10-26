@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypelayout="1.0"?>
+<package format="3">
+  <name>h12_teleop</name>
+  <version>0.0.0</version>
+  <description>H1_2 Humanoid Robot Teleoperation Package</description>
+  <maintainer email="t.raviteja@gmail.com">Raviteja Tirumalapudi</maintainer>
+  <license>Apache-2.0</license>
+
+  <depend>rclpy</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>joy</depend>
+  <depend>teleop_twist_joy</depend>
+
+  <exec_depend>ros2launch</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
