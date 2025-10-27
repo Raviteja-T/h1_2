@@ -13,8 +13,8 @@ The goal of this project is to enable the Unitree H1-2 humanoid robot to communi
 - Configure router/dual-IP solution for parallel access.
 - ✅ Build dashboard for easy monitoring of robot sensors.
 - ✅ Create URDF/Xacro model of H1-2 for simulation.
-- ✅ Set up ROS 2 simulation environment (Gazebo/Isaac Sim).
-- Implement basic teleop for joint-level and base movement.
+- ✅ Set up ROS 2 simulation environment (MoJoCo).
+- ✅ Implement basic teleop for joint-level and base movement.
 - Document setup, connectivity, and workflows.
 
 
