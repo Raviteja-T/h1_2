@@ -29,19 +29,22 @@ class H12TeleopNode(Node):
         self.joint_positions = [0.0] * 27
         self.set_standing_position()
         
-        # Hand control state
+        # Arm control state
         self.left_hand_open = False
         self.right_hand_open = False
         self.hug_mode = False
+        self.arms_wide_open = False
+        self.arms_crossed = False
+        self.victory_pose = False
+        self.muscle_pose = False
         
         self.get_logger().info('H12 Teleoperation Node Started')
         self.get_logger().info('Controls:')
         self.get_logger().info('  Left Stick: Move body')
         self.get_logger().info('  Right Stick: Control arms')
-        self.get_logger().info('  A/B: Change modes')
-        self.get_logger().info('  X/Y: Special actions')
+        self.get_logger().info('  A/B/X/Y: Special poses')
         self.get_logger().info('  L1/R1: Open/Close hands')
-        self.get_logger().info('  L2/R2: Hug mode')
+        self.get_logger().info('  L2/R2: Arm poses')
     
     def set_standing_position(self):
         """Set default standing position for H1_2"""
@@ -92,8 +95,91 @@ class H12TeleopNode(Node):
         self.left_hand_open = True
         self.right_hand_open = True
     
+    def set_arms_wide_open(self):
+        """Open arms wide fully (T-pose)"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
+        # Left arm - fully extended sideways
+        self.joint_positions[18] = 1.57   # Left shoulder pitch (90 degrees out)
+        self.joint_positions[21] = 0.0    # Left elbow straight
+        self.joint_positions[14] = 0.0    # Left shoulder roll
+        
+        # Right arm - fully extended sideways
+        self.joint_positions[12] = -1.57  # Right shoulder pitch (-90 degrees out)
+        self.joint_positions[15] = 0.0    # Right elbow straight
+        self.joint_positions[21] = 0.0    # Right shoulder roll
+        
+        # Open hands
+        self.set_hands_open()
+        
+        self.arms_wide_open = True
+        self.get_logger().info('Arms WIDE OPEN (T-pose)')
+    
+    def set_arms_crossed(self):
+        """Cross arms in front (defensive/thinking pose)"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
+        # Left arm across right
+        self.joint_positions[18] = -0.8   # Left shoulder pitch forward
+        self.joint_positions[21] = -1.2   # Left elbow bent
+        self.joint_positions[14] = 0.5    # Left shoulder roll across
+        
+        # Right arm across left
+        self.joint_positions[12] = -0.8   # Right shoulder pitch forward
+        self.joint_positions[15] = -1.2   # Right elbow bent
+        self.joint_positions[21] = -0.5   # Right shoulder roll across
+        
+        self.arms_crossed = True
+        self.get_logger().info('Arms CROSSED')
+    
+    def set_victory_pose(self):
+        """Victory pose with arms raised in V shape"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
+        # Both arms up in V shape
+        self.joint_positions[18] = -1.2   # Left shoulder pitch up
+        self.joint_positions[21] = -0.5   # Left elbow slightly bent
+        self.joint_positions[14] = 0.3    # Left shoulder roll out
+        
+        self.joint_positions[12] = -1.2   # Right shoulder pitch up
+        self.joint_positions[15] = -0.5   # Right elbow slightly bent
+        self.joint_positions[21] = -0.3   # Right shoulder roll out
+        
+        # Open hands
+        self.set_hands_open()
+        
+        self.victory_pose = True
+        self.get_logger().info('VICTORY pose!')
+    
+    def set_muscle_pose(self):
+        """Bodybuilder pose with flexed arms"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
+        # Left arm flexed
+        self.joint_positions[18] = -0.5   # Left shoulder pitch forward
+        self.joint_positions[21] = -2.0   # Left elbow fully bent
+        self.joint_positions[14] = 0.2    # Left shoulder roll
+        
+        # Right arm flexed
+        self.joint_positions[12] = -0.5   # Right shoulder pitch forward
+        self.joint_positions[15] = -2.0   # Right elbow fully bent
+        self.joint_positions[21] = -0.2   # Right shoulder roll
+        
+        # Closed hands (fists)
+        self.set_hands_closed()
+        
+        self.muscle_pose = True
+        self.get_logger().info('MUSCLE pose!')
+    
     def set_hug_position(self):
         """Set hands in hugging position to hold objects"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
         # Bring arms forward and hands in grasping position
         self.joint_positions[12] = -0.8   # Right shoulder pitch (forward)
         self.joint_positions[15] = -1.2   # Right elbow (bent)
@@ -105,16 +191,21 @@ class H12TeleopNode(Node):
         self.joint_positions[24] = -0.3   # Right wrist roll (slightly open)
         
         self.hug_mode = True
+        self.get_logger().info('Hug mode ACTIVATED - ready to hold objects!')
+    
+    def reset_arm_poses(self):
+        """Reset all arm pose flags"""
+        self.arms_wide_open = False
+        self.arms_crossed = False
+        self.victory_pose = False
+        self.muscle_pose = False
+        self.hug_mode = False
     
     def calculate_hand_distance(self):
         """Calculate distance between hands in millimeters"""
         # Simplified calculation based on arm positions
-        # This assumes a rough estimate - in real implementation, you'd use forward kinematics
         
-        left_shoulder_pos = [0.0, 0.2, 0.0]  # Left shoulder base position (meters)
-        right_shoulder_pos = [0.0, -0.2, 0.0]  # Right shoulder base position
-        
-        # Calculate hand positions based on joint angles (simplified)
+        # Calculate hand positions based on joint angles
         left_hand_pos = self.calculate_forward_kinematics_left()
         right_hand_pos = self.calculate_forward_kinematics_right()
         
@@ -129,8 +220,8 @@ class H12TeleopNode(Node):
     
     def calculate_forward_kinematics_left(self):
         """Simplified forward kinematics for left hand"""
-        # This is a simplified calculation - real FK would be more complex
         shoulder_pitch = self.joint_positions[18] or 0.0
+        shoulder_roll = self.joint_positions[14] or 0.0
         elbow = self.joint_positions[21] or 0.0
         
         # Approximate arm lengths (meters)
@@ -138,15 +229,15 @@ class H12TeleopNode(Node):
         lower_arm_length = 0.3
         
         x = upper_arm_length * math.sin(shoulder_pitch) + lower_arm_length * math.sin(shoulder_pitch + elbow)
-        y = 0.2  # Left side offset
+        y = 0.2 + upper_arm_length * math.sin(shoulder_roll) + lower_arm_length * math.sin(shoulder_roll)  # Left side offset
         z = upper_arm_length * math.cos(shoulder_pitch) + lower_arm_length * math.cos(shoulder_pitch + elbow)
         
         return [x, y, z]
     
     def calculate_forward_kinematics_right(self):
         """Simplified forward kinematics for right hand"""
-        # This is a simplified calculation - real FK would be more complex
         shoulder_pitch = self.joint_positions[12] or 0.0
+        shoulder_roll = self.joint_positions[21] or 0.0
         elbow = self.joint_positions[15] or 0.0
         
         # Approximate arm lengths (meters)
@@ -154,7 +245,7 @@ class H12TeleopNode(Node):
         lower_arm_length = 0.3
         
         x = upper_arm_length * math.sin(shoulder_pitch) + lower_arm_length * math.sin(shoulder_pitch + elbow)
-        y = -0.2  # Right side offset
+        y = -0.2 - upper_arm_length * math.sin(shoulder_roll) - lower_arm_length * math.sin(shoulder_roll)  # Right side offset
         z = upper_arm_length * math.cos(shoulder_pitch) + lower_arm_length * math.cos(shoulder_pitch + elbow)
         
         return [x, y, z]
@@ -196,10 +287,11 @@ class H12TeleopNode(Node):
             
             self.twist_pub.publish(twist_msg)
             
-            # Control arms with right stick
-            self.joint_positions[12] = right_y * arm_scale  # Right shoulder
-            self.joint_positions[15] = -right_y * arm_scale * 0.7  # Right elbow
-            self.joint_positions[18] = -right_y * arm_scale * 0.3  # Left shoulder
+            # Control arms with right stick (only if no special pose active)
+            if not any([self.arms_wide_open, self.arms_crossed, self.victory_pose, self.muscle_pose, self.hug_mode]):
+                self.joint_positions[12] = right_y * arm_scale  # Right shoulder
+                self.joint_positions[15] = -right_y * arm_scale * 0.7  # Right elbow
+                self.joint_positions[18] = -right_y * arm_scale * 0.3  # Left shoulder
             
             # Hand controls
             if l1_button:  # Toggle left hand
@@ -214,30 +306,27 @@ class H12TeleopNode(Node):
                 else:
                     self.set_right_hand_open()
             
+            # Arm pose controls
             if l2_button and r2_button:  # Both triggers - hug mode
                 self.set_hug_position()
-                self.get_logger().info('Hug mode activated!')
-            elif l2_button:  # Left trigger - open both hands
-                self.set_hands_open()
-            elif r2_button:  # Right trigger - close both hands
-                self.set_hands_closed()
+            elif l2_button:  # Left trigger - arms wide open
+                self.set_arms_wide_open()
+            elif r2_button:  # Right trigger - arms crossed
+                self.set_arms_crossed()
             
-            # Special actions with buttons
-            if a_button:  # Wave right arm
-                self.joint_positions[12] = math.sin(self.get_clock().now().nanoseconds / 1e9 * 2) * 0.5
-                self.joint_positions[15] = -math.sin(self.get_clock().now().nanoseconds / 1e9 * 2) * 0.3
+            # Special poses with buttons
+            if a_button:  # Victory pose
+                self.set_victory_pose()
             
             if b_button:  # Reset to standing
                 self.set_standing_position()
-                self.hug_mode = False
+                self.reset_arm_poses()
             
-            if x_button:  # Raise arms
-                self.joint_positions[12] = -0.5
-                self.joint_positions[18] = -0.5
+            if x_button:  # Muscle pose
+                self.set_muscle_pose()
             
-            if y_button:  # Lower arms
-                self.joint_positions[12] = 0.5
-                self.joint_positions[18] = 0.5
+            if y_button:  # T-pose (arms wide open)
+                self.set_arms_wide_open()
             
             # Calculate and log hand distance
             hand_distance = self.calculate_hand_distance()

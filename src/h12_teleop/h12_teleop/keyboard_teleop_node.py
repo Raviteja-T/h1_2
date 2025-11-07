@@ -38,10 +38,14 @@ class KeyboardTeleopNode(Node):
         self.walking_active = False
         self.walk_commands = [0.0, 0.0, 0.0]  # [forward, lateral, rotational]
         
-        # Hand control state
+        # Arm control state
         self.left_hand_open = False
         self.right_hand_open = False
         self.hug_mode = False
+        self.arms_wide_open = False
+        self.arms_crossed = False
+        self.victory_pose = False
+        self.muscle_pose = False
         
         self.get_logger().info('H12 Keyboard Teleoperation Node Started')
         self.print_controls()
@@ -113,8 +117,105 @@ class KeyboardTeleopNode(Node):
         self.right_hand_open = True
         self.get_logger().info('Both hands OPEN')
     
+    def set_arms_wide_open(self):
+        """Open arms wide fully (T-pose)"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
+        # Left arm - fully extended sideways
+        self.joint_positions[13] = 1.57   # Left shoulder pitch (90 degrees out)
+        self.joint_positions[16] = 0.0    # Left elbow straight
+        self.joint_positions[14] = 0.0    # Left shoulder roll
+        
+        # Right arm - fully extended sideways
+        self.joint_positions[20] = -1.57  # Right shoulder pitch (-90 degrees out)
+        self.joint_positions[23] = 0.0    # Right elbow straight
+        self.joint_positions[21] = 0.0    # Right shoulder roll
+        
+        # Open hands
+        self.set_hands_open()
+        
+        self.arms_wide_open = True
+        self.get_logger().info('Arms WIDE OPEN (T-pose)')
+    
+    def set_arms_crossed(self):
+        """Cross arms in front (defensive/thinking pose)"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
+        # Left arm across right
+        self.joint_positions[13] = -0.8   # Left shoulder pitch forward
+        self.joint_positions[16] = -1.2   # Left elbow bent
+        self.joint_positions[14] = 0.5    # Left shoulder roll across
+        
+        # Right arm across left
+        self.joint_positions[20] = -0.8   # Right shoulder pitch forward
+        self.joint_positions[23] = -1.2   # Right elbow bent
+        self.joint_positions[21] = -0.5   # Right shoulder roll across
+        
+        self.arms_crossed = True
+        self.get_logger().info('Arms CROSSED')
+    
+    def set_victory_pose(self):
+        """Victory pose with arms raised in V shape"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
+        # Both arms up in V shape
+        self.joint_positions[13] = -1.2   # Left shoulder pitch up
+        self.joint_positions[16] = -0.5   # Left elbow slightly bent
+        self.joint_positions[14] = 0.3    # Left shoulder roll out
+        
+        self.joint_positions[20] = -1.2   # Right shoulder pitch up
+        self.joint_positions[23] = -0.5   # Right elbow slightly bent
+        self.joint_positions[21] = -0.3   # Right shoulder roll out
+        
+        # Open hands
+        self.set_hands_open()
+        
+        self.victory_pose = True
+        self.get_logger().info('VICTORY pose!')
+    
+    def set_muscle_pose(self):
+        """Bodybuilder pose with flexed arms"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
+        # Left arm flexed
+        self.joint_positions[13] = -0.5   # Left shoulder pitch forward
+        self.joint_positions[16] = -2.0   # Left elbow fully bent
+        self.joint_positions[14] = 0.2    # Left shoulder roll
+        
+        # Right arm flexed
+        self.joint_positions[20] = -0.5   # Right shoulder pitch forward
+        self.joint_positions[23] = -2.0   # Right elbow fully bent
+        self.joint_positions[21] = -0.2   # Right shoulder roll
+        
+        # Closed hands (fists)
+        self.set_hands_closed()
+        
+        self.muscle_pose = True
+        self.get_logger().info('MUSCLE pose!')
+    
+    def set_arms_forward(self):
+        """Both arms forward (zombie pose)"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
+        # Both arms straight forward
+        self.joint_positions[13] = -1.57   # Left shoulder pitch forward
+        self.joint_positions[16] = 0.0     # Left elbow straight
+        
+        self.joint_positions[20] = -1.57   # Right shoulder pitch forward
+        self.joint_positions[23] = 0.0     # Right elbow straight
+        
+        self.get_logger().info('Arms FORWARD (zombie pose)')
+    
     def set_hug_position(self):
         """Set hands in hugging position to hold objects"""
+        # Reset other poses
+        self.reset_arm_poses()
+        
         # Bring arms forward and hands in grasping position
         self.joint_positions[13] = -0.8   # Left shoulder pitch (forward)
         self.joint_positions[16] = -1.2   # Left elbow (bent)
@@ -127,6 +228,14 @@ class KeyboardTeleopNode(Node):
         
         self.hug_mode = True
         self.get_logger().info('Hug mode ACTIVATED - ready to hold objects!')
+    
+    def reset_arm_poses(self):
+        """Reset all arm pose flags"""
+        self.arms_wide_open = False
+        self.arms_crossed = False
+        self.victory_pose = False
+        self.muscle_pose = False
+        self.hug_mode = False
     
     def calculate_hand_distance(self):
         """Calculate distance between hands in millimeters"""
@@ -148,6 +257,7 @@ class KeyboardTeleopNode(Node):
     def calculate_forward_kinematics_left(self):
         """Simplified forward kinematics for left hand"""
         shoulder_pitch = self.joint_positions[13] or 0.0
+        shoulder_roll = self.joint_positions[14] or 0.0
         elbow = self.joint_positions[16] or 0.0
         
         # Approximate arm lengths (meters)
@@ -155,7 +265,7 @@ class KeyboardTeleopNode(Node):
         lower_arm_length = 0.3
         
         x = upper_arm_length * math.sin(shoulder_pitch) + lower_arm_length * math.sin(shoulder_pitch + elbow)
-        y = 0.2  # Left side offset
+        y = 0.2 + upper_arm_length * math.sin(shoulder_roll) + lower_arm_length * math.sin(shoulder_roll)  # Left side offset
         z = upper_arm_length * math.cos(shoulder_pitch) + lower_arm_length * math.cos(shoulder_pitch + elbow)
         
         return [x, y, z]
@@ -163,6 +273,7 @@ class KeyboardTeleopNode(Node):
     def calculate_forward_kinematics_right(self):
         """Simplified forward kinematics for right hand"""
         shoulder_pitch = self.joint_positions[20] or 0.0
+        shoulder_roll = self.joint_positions[21] or 0.0
         elbow = self.joint_positions[23] or 0.0
         
         # Approximate arm lengths (meters)
@@ -170,7 +281,7 @@ class KeyboardTeleopNode(Node):
         lower_arm_length = 0.3
         
         x = upper_arm_length * math.sin(shoulder_pitch) + lower_arm_length * math.sin(shoulder_pitch + elbow)
-        y = -0.2  # Right side offset
+        y = -0.2 - upper_arm_length * math.sin(shoulder_roll) - lower_arm_length * math.sin(shoulder_roll)  # Right side offset
         z = upper_arm_length * math.cos(shoulder_pitch) + lower_arm_length * math.cos(shoulder_pitch + elbow)
         
         return [x, y, z]
@@ -196,6 +307,13 @@ class KeyboardTeleopNode(Node):
         print("  V: Toggle left hand")
         print("  B: Toggle right hand")
         
+        print("\nARM POSES (12345):")
+        print("  1: Arms WIDE OPEN (T-pose)")
+        print("  2: Arms CROSSED")
+        print("  3: VICTORY pose")
+        print("  4: MUSCLE pose")
+        print("  5: Arms FORWARD (zombie)")
+        
         print("\nWALKING GAIT (WALKING MODE):")
         print("  W/S: Walk Forward/Backward")
         print("  A/D: Strafe Left/Right")
@@ -206,7 +324,6 @@ class KeyboardTeleopNode(Node):
         print("  R: Reset to standing")
         print("  T: Toggle arm waving")
         print("  M: Switch control mode")
-        print("  G: Toggle walking")
         print("  C: Current status")
         print("  Ctrl+C: Exit")
         print(f"\nCurrent Mode: {self.control_mode}")
@@ -278,13 +395,25 @@ class KeyboardTeleopNode(Node):
             else:
                 self.set_right_hand_open()
         
+        # Arm pose controls
+        if key == '1':  # Arms wide open
+            self.set_arms_wide_open()
+        elif key == '2':  # Arms crossed
+            self.set_arms_crossed()
+        elif key == '3':  # Victory pose
+            self.set_victory_pose()
+        elif key == '4':  # Muscle pose
+            self.set_muscle_pose()
+        elif key == '5':  # Arms forward
+            self.set_arms_forward()
+        
         # Mode-independent controls
         if key == 'r':  # Reset
             self.set_standing_position()
             self.body_movement_active = False
             self.walking_active = False
             self.walk_commands = [0.0, 0.0, 0.0]
-            self.hug_mode = False
+            self.reset_arm_poses()
             self.get_logger().info('Reset to standing position')
         
         elif key == 't':  # Toggle arm wave
@@ -305,7 +434,7 @@ class KeyboardTeleopNode(Node):
         elif key == 'c':  # Status
             self.get_logger().info(f'Mode: {self.control_mode}, Walking: {self.walking_active}, Arm Wave: {self.arm_wave_active}')
             self.get_logger().info(f'Left hand: {"OPEN" if self.left_hand_open else "CLOSED"}, Right hand: {"OPEN" if self.right_hand_open else "CLOSED"}')
-            self.get_logger().info(f'Hug mode: {"ACTIVE" if self.hug_mode else "INACTIVE"}')
+            self.get_logger().info(f'Arms: {"WIDE_OPEN" if self.arms_wide_open else "CROSSED" if self.arms_crossed else "VICTORY" if self.victory_pose else "MUSCLE" if self.muscle_pose else "HUG" if self.hug_mode else "NORMAL"}')
     
     def set_left_hand_open(self):
         """Open left hand wide"""
