@@ -101,7 +101,8 @@ Once the system is running, use these keys in the Keyboard Control terminal:
 | E | Rotate Right | Twist torso clockwise |
 | X | Stop Movement | Return to neutral position |
 
-### Arm Control Mode (Press M to switch)
+### 🦾 Arm Control Mode (Press `M` to switch)
+
 | Key | Action | Description |
 |-----|---------|-------------|
 | F | Open Hands | Open both hands wide |
@@ -115,6 +116,11 @@ Once the system is running, use these keys in the Keyboard Control terminal:
 | L | Left Arm Down | Lower left shoulder |
 | U | Both Arms Up | Raise both arms |
 | O | Both Arms Down | Lower both arms |
+| 1 | Arms Wide Open (T-pose) | Fully extend both arms sideways at 90° |
+| 2 | Arms Crossed | Cross both arms in front of the body |
+| 3 | Victory Pose | Raise both arms in a V-shape above the head |
+| 4 | Muscle Pose | Flex arms with bent elbows and closed fists |
+| 5 | Arms Forward (Zombie Pose) | Extend both arms straight forward |
 
 
 ### Walking Gait Mode (Press M again to switch)
