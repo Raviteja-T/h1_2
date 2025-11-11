@@ -10,7 +10,7 @@ The goal of this project is to enable the Unitree H1-2 humanoid robot to communi
 - ✅ Establish SSH & ROS 2 communication with robot core and hands.
 - ✅ Access and test onboard camera and hands control.
 - ✅ Enable LiDAR and other sensors in ROS 2.
-- Configure router/dual-IP solution for parallel access.
+- ✅ Configure router/dual-IP solution for parallel access.
 - ✅ Build dashboard for easy monitoring of robot sensors.
 - ✅ Create URDF/Xacro model of H1-2 for simulation.
 - ✅ Set up ROS 2 simulation environment (MoJoCo).
