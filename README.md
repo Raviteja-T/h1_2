@@ -5,7 +5,7 @@ This ROS 2 package streams the **front camera** from a Unitree robot H1-2 and pu
 ---
 ## Author / Maintainer
 
-## Tirumalapudi Raviteja
+Tirumalapudi Raviteja
 
 ## Install Dependencies
 
